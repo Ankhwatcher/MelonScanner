@@ -1,2 +1,2 @@
-# MellonScanner
-An application for scanning for and connecting to Mellon Headbands 
+# MelonScanner
+An application for scanning for and connecting to Melon Headbands 
