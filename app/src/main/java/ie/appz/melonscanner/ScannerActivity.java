@@ -54,15 +54,6 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
             }
         });
 
-        lvDevices.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long
-                    id) {
-
-                return true;
-            }
-        });
-
         new AlertDialog.Builder(this).setMessage("When the Melon is " +
                 "connected it's light will change from flashing to solid.").setPositiveButton
                 ("OKAY", new DialogInterface.OnClickListener() {
@@ -99,7 +90,6 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
     protected void onResume() {
         super.onResume();
         DeviceManager.getManager().addListener(this);
-
         DeviceManager.getManager().startScan();
     }
 
@@ -143,9 +133,32 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
     }
 
     @Override
-    public void onDeviceConnected(DeviceHandle deviceHandle) {
+    public void onDeviceConnected(final DeviceHandle deviceHandle) {
         Toast.makeText(ScannerActivity.this, "Device Connected", Toast.LENGTH_SHORT).show();
         mAdapter.notifyDataSetChanged();
+        new AlertDialog.Builder(this)
+                .setMessage("Is " + deviceHandle.getName() + " your Melon?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getSharedPreferences(getApplication().getPackageName(),
+                                        MODE_PRIVATE)
+                                        .edit()
+                                        .putString(Constants.PREF_MY_MELON_NAME, deviceHandle
+                                                .getName())
+                                        .apply();
+                            }
+                        }
+                )
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deviceHandle.disconnect();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                })
+                .create()
+                .show();
     }
 
     class DeviceHandleAdapter extends BaseAdapter {
