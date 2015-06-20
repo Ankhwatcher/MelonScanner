@@ -54,14 +54,7 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
             }
         });
 
-        new AlertDialog.Builder(this).setMessage("When the Melon is " +
-                "connected it's light will change from flashing to solid.").setPositiveButton
-                ("OKAY", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+
     }
 
     @Override
@@ -116,7 +109,6 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
     public void onDeviceFound(DeviceHandle deviceHandle) {
         Toast.makeText(ScannerActivity.this, "Device Found", Toast.LENGTH_SHORT).show();
 
-
         mAdapter.notifyDataSetChanged();
     }
 
@@ -137,16 +129,41 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
         Toast.makeText(ScannerActivity.this, "Device Connected", Toast.LENGTH_SHORT).show();
         mAdapter.notifyDataSetChanged();
         new AlertDialog.Builder(this)
-                .setMessage("Is " + deviceHandle.getName() + " your Melon?")
+                .setTitle("Is " + deviceHandle.getName() + " your Melon?")
+                .setMessage("Your Melon's light will have changed from flashing to solid if it is" +
+                        " connected.")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                getSharedPreferences(getApplication().getPackageName(),
+                                getSharedPreferences(getApplication()
+                                                .getPackageName(),
                                         MODE_PRIVATE)
                                         .edit()
-                                        .putString(Constants.PREF_MY_MELON_NAME, deviceHandle
-                                                .getName())
+                                        .putString(Constants.PREF_MY_MELON_NAME,
+                                                deviceHandle
+                                                        .getName())
                                         .apply();
+                                new AlertDialog.Builder(ScannerActivity.this)
+                                        .setMessage("Cool! I'll connect to your " +
+                                                "Melon next time I" +
+                                                " see it!")
+                                        .setPositiveButton("THANKS", new
+                                                DialogInterface
+                                                        .OnClickListener() {
+
+
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog,
+                                                                        int which) {
+                                                        dialog.dismiss();
+                                                        /*
+                                                        At this point you will probably want to
+                                                        navigate the user to your application.
+                                                         */
+                                                    }
+                                                })
+                                        .create()
+                                        .show();
                             }
                         }
                 )
