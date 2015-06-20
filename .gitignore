@@ -1,0 +1,9 @@
+.gradle
+/local.properties
+/build
+/captures
+/MelonSDK
+.idea
+.DS_Store
+
+*.iml
