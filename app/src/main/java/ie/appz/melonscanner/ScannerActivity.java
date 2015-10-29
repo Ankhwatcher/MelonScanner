@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.axio.melonplatformkit.DeviceHandle;
 import com.axio.melonplatformkit.DeviceManager;
-import com.axio.melonplatformkit.IDeviceManagerListener;
+import com.axio.melonplatformkit.listeners.IDeviceManagerListener;
 
 public class ScannerActivity extends AppCompatActivity implements IDeviceManagerListener {
     private DeviceHandleAdapter mAdapter;
@@ -176,6 +176,16 @@ public class ScannerActivity extends AppCompatActivity implements IDeviceManager
                 })
                 .create()
                 .show();
+    }
+
+    @Override
+    public void onDeviceConnecting(DeviceHandle deviceHandle) {
+
+    }
+
+    @Override
+    public void onDeviceUnknowStatus(DeviceHandle deviceHandle) {
+
     }
 
     class DeviceHandleAdapter extends BaseAdapter {
